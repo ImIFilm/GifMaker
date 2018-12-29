@@ -24,12 +24,6 @@ void show_array(int *tab, int n){
     }
     printf("\n");
 }
-void show_2dimetional_array(int w, int h, int tab[w][h]){
-    for (int i=0; i<h; i++){
-        printf("wiersz numer %d:\n", i);
-        show_array(tab[i], h);
-    }
-}
 void insert_header_GIF89a_1(int *tab, int n){
     value_into_array(tab, n, 71); //47
     value_into_array(tab, n, 73); //49
@@ -94,10 +88,7 @@ void insert_image_descriptor(int *tab, int n, int w, int h){
 
     value_into_array(tab, n, 0); //packed field
 }
-void insert_image_data (int *tab, int n){
-    value_into_array(tab, n, 2);
-    value_into_array(tab, n, 22);
-}
+
 void put_value_to_code_array(int tab[LEN][2], int n, int value, int m){
     int i=0;
     for (i; i<n; i++) if (tab[i][0]==-1) break;  //empty cells are with -1 value
@@ -164,8 +155,11 @@ int main () {
     insert_global_color_table(arr, array_size); //in this case 4 colors - to be modified
     //insert animation block etc
     insert_image_descriptor(arr, array_size, w, h);
-    insert_image_data(arr, array_size);
 
+    value_into_array(arr, array_size, 2);
+    value_into_array(arr, array_size, -3);
+
+    //const int data[]={1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 };
     const int data[]={1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 };
     size_t n = sizeof(data)/sizeof(data[0]);
     printf("\nilosc pikseli obrazu: %d\n", n);
@@ -253,12 +247,14 @@ int main () {
         i++;
     }
 
+
     printf("\n\n nasza tablica big_arr:\n");
     show_array(big_arr, 1000);
 
     //save to 8bits
     i=0;
     pointer=0;
+    int bytes_counter=0;
     while(1){
         double sum=0;
         for (int j=0; j<8; j++){
@@ -266,17 +262,20 @@ int main () {
                 double two=2;
                 double exp = (double) j;
                 sum+=pow(two, exp);
-
             }
 
         }
         int sum2=(int) sum;
         value_into_array(arr, array_size, sum2);
+        bytes_counter++;
         pointer+=8;
         i++;
         if (big_arr[pointer]==-1) break;
     }
 
+    for (int k=0; k<array_size; k++){
+        if (arr[k]==-3) arr[k]=bytes_counter;
+    }
 
     value_into_array(arr, array_size, 0);
     value_into_array(arr, array_size, 59);
