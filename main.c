@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <tgmath.h>
 
-#define LEN 200
+#define LEN 500
 void clean_array(int *tab, int n){
     for (int i=0; i<n; i++){
         tab[i]=-1;
@@ -39,28 +39,77 @@ void insert_size_2(int *tab, int n, int width, int height){
     value_into_array(tab, n, 0);
 } //now we can set up to 255 image size
 void insert_packed_byte_3(int *tab, int n) {
-    value_into_array(tab, n, 145);
-} //now insert 1111 0001: (1)-global color table present, (111)-color resolution, (0)-sort flag, (001)-size of global color table(4)
+    value_into_array(tab, n, 195);
+} //now insert 1001 0001: (1)-global color table present, (001)-color resolution, (0)-sort flag, (001)-size of global color table(4)
 void insert_background_and_aspect_ratio4(int *tab, int n, int x) {
     value_into_array(tab, n, x);
     value_into_array(tab, n, 0);
 }
 void insert_global_color_table(int *tab, int n){
-    value_into_array(tab, n, 255);//white
-    value_into_array(tab, n, 255);
-    value_into_array(tab, n, 255);
-
-    value_into_array(tab, n, 255);//red
+    //1
     value_into_array(tab, n, 0);
     value_into_array(tab, n, 0);
-
-    value_into_array(tab, n, 0);//blue
     value_into_array(tab, n, 0);
-    value_into_array(tab, n, 255);
-
-    value_into_array(tab, n, 0);//black
+    //2
     value_into_array(tab, n, 0);
+    value_into_array(tab, n, 30);
+    value_into_array(tab, n, 30);
+    //3
     value_into_array(tab, n, 0);
+    value_into_array(tab, n, 60);
+    value_into_array(tab, n, 60);
+    //4
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 90);
+    value_into_array(tab, n, 90);
+    //5
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 120);
+    value_into_array(tab, n, 120);
+    //6
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 150);
+    value_into_array(tab, n, 150);
+    //7
+    value_into_array(tab, n, 0);//white
+    value_into_array(tab, n, 180);
+    value_into_array(tab, n, 180);
+    //8
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 210);
+    value_into_array(tab, n, 210);
+    //9
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 220);
+    value_into_array(tab, n, 220);
+    //10
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 230);
+    value_into_array(tab, n, 230);
+    //11
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 240);
+    value_into_array(tab, n, 240);
+    //12
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 250);
+    value_into_array(tab, n, 250);
+    //13
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 251);
+    value_into_array(tab, n, 251);
+    //14
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 252);
+    value_into_array(tab, n, 252);
+    //15
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 253);
+    value_into_array(tab, n, 253);
+    //16
+    value_into_array(tab, n, 0);
+    value_into_array(tab, n, 254);
+    value_into_array(tab, n, 254);
 }
 void insert_image_descriptor(int *tab, int n, int w, int h){
     ///*
@@ -88,7 +137,6 @@ void insert_image_descriptor(int *tab, int n, int w, int h){
 
     value_into_array(tab, n, 0); //packed field
 }
-
 void put_value_to_code_array(int tab[LEN][2], int n, int value, int m){
     int i=0;
     for (i; i<n; i++) if (tab[i][0]==-1) break;  //empty cells are with -1 value
@@ -125,59 +173,52 @@ int check_if_in_array(int tab[LEN][LEN], int n, int *value, int m){
     printf("\nreturnuje false");
     return -2;
 }
-int number_in_array(int tab[LEN][LEN], int n, int *value, int m){
-    bool exists=true;
-    int i;
-    for (i; i<n; i++) {
-        exists=true;
-        for (int j=0; j<m; j++) {
-            if (!tab[i][j] == value[j]) exists = 0;
-        }
-        if(exists) return i;
-    }
-}
 
 int main () {
-
-
-
-    int array_size=1000;
+    int array_size=5000;
     int arr[array_size];
     clean_array(arr, array_size);
 
-    int w=10;
-    int h=10;
+    int w=86;
+    int h=86;
 
     insert_header_GIF89a_1(arr, array_size); //insert header GIF89a:
     insert_size_2(arr, array_size, w, h); //set size of GIF
     insert_packed_byte_3(arr, array_size);
     insert_background_and_aspect_ratio4(arr, array_size, 0);
-    insert_global_color_table(arr, array_size); //in this case 4 colors - to be modified
-    //insert animation block etc
+    insert_global_color_table(arr, array_size); //in this case 16 colors - to be modified
     insert_image_descriptor(arr, array_size, w, h);
 
-    value_into_array(arr, array_size, 2);
+    value_into_array(arr, array_size, 4); //original CODEE SIZEEEEE
     value_into_array(arr, array_size, -3);
 
     //const int data[]={1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 };
-    const int data[]={1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 };
+    /*const int data[]={8, 8, 1, 1, 8, 1, 1, 8, 8, 8, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 ,
+                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1 ,
+                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1,
+                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1  };
+   */
+    int data[w*h];
+    for (int i=0; i<w*h; i++) data[i]=i%16;
+
+
     size_t n = sizeof(data)/sizeof(data[0]);
     printf("\nilosc pikseli obrazu: %d\n", n);
 
     //LZW_encoding(arr, array_size, data, n);
 
-    int current_code_size=3;
+    int current_code_size=5;
     int code[LEN][2];
     for (int i=0; i<LEN; i++) clean_array(code[i], 2);
 
-    code[0][0]=4;
+    code[0][0]=16;
     code[0][1]=current_code_size;
 
     int dictionary[LEN][LEN];
     for (int i=0; i<LEN; i++) clean_array(dictionary[i], LEN);
-    for (int i=0; i<4; i++) dictionary[i][0]=i;
-    dictionary[4][0]=-2;
-    dictionary[5][0]=-2;
+    for (int i=0; i<16; i++) dictionary[i][0]=i;
+    dictionary[16][0]=-2;
+    dictionary[17][0]=-2;
 
     int buffer[LEN];
     clean_array(buffer, LEN);
@@ -198,11 +239,10 @@ int main () {
             buffer[buffer_index] = data[input_index];
             printf("\nznalazlem w slowniku\n");
         } else{ //jesli nie ma
-            //put buffer to dictionary
             printf("\nnie znalazlem w slowniku, wiec wpisuje \n");
             int i1=0;
             for (i1; i1<LEN; i1++) if (dictionary[i1][0]==-1) break;  //empty cells are with -1 value
-            for (int j=0; j<LEN; j++) dictionary[i1][j]=buffer[j]; //TODO with 7 or LEN???
+            for (int j=0; j<LEN; j++) dictionary[i1][j]=buffer[j];
             num_in_dictionary = i1;
             double cur=(double) current_code_size, two=2;
             printf("\nnum in dictionary: %d, as pow(2, current code size):%f \n", num_in_dictionary, pow(two, cur));
@@ -216,23 +256,23 @@ int main () {
             buffer_index = 0;
             buffer[buffer_index] = data[input_index];
         }
-        if (input_index == 100){
+        if (input_index == w*h){
             put_value_to_code_array(code, LEN, check_if_in_array(dictionary, LEN, buffer, buffer_index-1), 0);
             put_value_to_code_array(code, LEN, current_code_size, 1);
             break;
         }
     }
 
-    put_value_to_code_array(code, LEN, 5, 0);
+    put_value_to_code_array(code, LEN, 17, 0);
     put_value_to_code_array(code, LEN, current_code_size, 1);
     printf("\n");
     //there is a problem with this cell
-    code[1][1]=3;
+    code[1][1]=5; //IMPORTANTTTT - stating code size!!!
     for (int i=0; i<LEN; i++) show_array(code[i], 2);
 
     //jak to przerobimy na bajty
-    int big_arr[10000];
-    clean_array(big_arr, 10000);
+    int big_arr[LEN*20];
+    clean_array(big_arr, LEN*20);
     int pointer=0;
     int i=0;
     while(1){
@@ -249,7 +289,7 @@ int main () {
 
 
     printf("\n\n nasza tablica big_arr:\n");
-    show_array(big_arr, 1000);
+    show_array(big_arr, LEN*5);
 
     //save to 8bits
     i=0;
@@ -268,6 +308,14 @@ int main () {
         int sum2=(int) sum;
         value_into_array(arr, array_size, sum2);
         bytes_counter++;
+        //poprawa - to caly if
+        if (bytes_counter==255){
+            for (int k=0; k<array_size; k++){
+                if (arr[k]==-3) arr[k]=bytes_counter;
+            }
+            value_into_array(arr, array_size, -3);
+            bytes_counter=0;
+        }
         pointer+=8;
         i++;
         if (big_arr[pointer]==-1) break;
@@ -277,6 +325,7 @@ int main () {
         if (arr[k]==-3) arr[k]=bytes_counter;
     }
 
+    //info that this is the end
     value_into_array(arr, array_size, 0);
     value_into_array(arr, array_size, 59);
 
@@ -294,7 +343,7 @@ int main () {
 
     //insert into file
     FILE *fp2;
-    fp2 = fopen("D:\moj-gif4.gif","wb+");
+    fp2 = fopen("D:\moj-gif6.gif","wb+");
     for (int i=0; i<array_size; i++){
         if(arr[i]==-1) break;
         c=arr[i];
@@ -305,7 +354,7 @@ int main () {
 
     printf("\n\n");
     FILE *fp3;
-    fp3 = fopen("D:\moj-gif4.gif", "rb"); // read mode
+    fp3 = fopen("D:\moj-gif6.gif", "rb"); // read mode
     while(1) {
         c = fgetc(fp3);
         if( feof(fp3) ) break;
